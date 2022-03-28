@@ -1,0 +1,21 @@
+version: "3"
+services:
+  db-publications:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: creative-hub-publications
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  microservice-publications:
+    build: .
+    image: creative-hub/microservice-publications:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-publications:5432/creative-hub-publications
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - db-publications
