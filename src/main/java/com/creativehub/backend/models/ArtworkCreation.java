@@ -1,11 +1,8 @@
 package com.creativehub.backend.models;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -13,4 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "artwork_creation")
 public class ArtworkCreation extends Creation {
+	@ManyToOne(cascade = CascadeType.ALL, optional = false)
+	@JoinColumn(name = "artwork_id", nullable = false)
+	private Artwork artwork;
 }
