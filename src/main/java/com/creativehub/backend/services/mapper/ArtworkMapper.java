@@ -1,0 +1,15 @@
+package com.creativehub.backend.services.mapper;
+
+import com.creativehub.backend.models.Artwork;
+import com.creativehub.backend.services.dto.ArtworkDto;
+import org.mapstruct.*;
+
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
+public interface ArtworkMapper {
+	Artwork artworkDtoToArtwork(ArtworkDto artworkDto);
+
+	ArtworkDto artworkToArtworkDto(Artwork artwork);
+
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	void updateArtworkFromArtworkDto(ArtworkDto artworkDto, @MappingTarget Artwork artwork);
+}
