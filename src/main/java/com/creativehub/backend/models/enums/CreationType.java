@@ -1,5 +1,5 @@
 package com.creativehub.backend.models.enums;
 
 public enum CreationType {
-	AUTHOR, FEATURING, COLLAB, OTHER
+	AUTHOR, COAUTHOR, FEATURING, COLLAB, OTHER
 }

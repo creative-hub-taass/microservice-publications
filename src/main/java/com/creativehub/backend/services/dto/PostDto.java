@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class PostDto implements Serializable {
+public class PostDto implements Serializable, PublicationDto {
 	private final UUID id;
 	private final Instant timestamp;
 	private final Instant lastUpdate;

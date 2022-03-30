@@ -2,6 +2,7 @@ package com.creativehub.backend.services.dto;
 
 import com.creativehub.backend.models.enums.CreationType;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -9,11 +10,12 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 @Data
-public class ArtworkDto implements Serializable {
+public class ArtworkDto implements Serializable, PublicationDto {
 	private final UUID id;
 	private final Instant timestamp;
 	private final Instant lastUpdate;
 	private final List<ArtworkCreationDto> creations;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private final OffsetDateTime creationDateTime;
 	private final String name;
 	private final String description;
