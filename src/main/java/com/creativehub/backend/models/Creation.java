@@ -24,7 +24,4 @@ public class Creation {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "creation_type", nullable = false)
 	private CreationType creationType;
-
-	@Column(name = "symbol")
-	private String symbol;
 }

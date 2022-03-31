@@ -11,6 +11,5 @@ public class PostCreationDto implements Serializable {
 	private final UUID id;
 	private final UUID user;
 	private final CreationType creationType;
-	private final String symbol;
 	private final UUID postId;
 }
