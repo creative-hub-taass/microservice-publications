@@ -16,8 +16,9 @@ import java.util.*;
 @Table(name = "artwork")
 @Check(constraints = "((on_sale = FALSE) OR (price IS NOT NULL)) AND ((price IS NULL) = (currency IS NULL))")
 public class Artwork extends Publication {
-	@Setter(AccessLevel.NONE)
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "artwork", orphanRemoval = true)
+	@ToString.Exclude
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "artwork_id")
 	private List<ArtworkCreation> creations = new ArrayList<>();
 
 	@Column(name = "creation_date_time", nullable = false)
@@ -32,9 +33,6 @@ public class Artwork extends Publication {
 
 	@Column(name = "type", nullable = false)
 	private String type;
-
-	@Column(name = "size")
-	private String size;
 
 	@Column(name = "copies", nullable = false)
 	private Integer copies;

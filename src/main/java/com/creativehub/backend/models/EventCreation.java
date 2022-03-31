@@ -4,7 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,7 +15,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "event_creation")
 public class EventCreation extends Creation {
-	@ManyToOne(cascade = CascadeType.ALL, optional = false)
-	@JoinColumn(name = "event_id", nullable = false)
-	private Event event;
+	@Column(name = "event_id", nullable = false, updatable = false)
+	private UUID eventId;
 }

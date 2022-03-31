@@ -1,9 +1,6 @@
 package com.creativehub.backend.services;
 
-import com.creativehub.backend.services.dto.ArtworkDto;
-import com.creativehub.backend.services.dto.EventDto;
-import com.creativehub.backend.services.dto.PostDto;
-import com.creativehub.backend.services.dto.PublicationDto;
+import com.creativehub.backend.services.dto.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -31,9 +28,27 @@ public interface PublicationsManager {
 
 	ResponseEntity<PostDto> savePost(PostDto postDto);
 
-	Optional<ArtworkDto> deleteArtworkById(UUID id);
+	void updateArtwork(UUID id, ArtworkDto postDto);
 
-	Optional<EventDto> deleteEventById(UUID id);
+	void updateEvent(UUID id, EventDto postDto);
 
-	Optional<PostDto> deletePostById(UUID id);
+	void updatePost(UUID id, PostDto postDto);
+
+	void deleteArtworkById(UUID id);
+
+	void deleteEventById(UUID id);
+
+	void deletePostById(UUID id);
+
+	void deleteArtworkCreationById(UUID id);
+
+	void deleteEventCreationById(UUID id);
+
+	void deletePostCreationById(UUID id);
+
+	ArtworkCreationDto saveArtworkCreation(ArtworkCreationDto artworkCreationDto);
+
+	EventCreationDto saveEventCreation(EventCreationDto eventCreationDto);
+
+	PostCreationDto savePostCreation(PostCreationDto postCreationDto);
 }

@@ -1,6 +1,5 @@
 package com.creativehub.backend.models;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,8 +14,9 @@ import java.util.List;
 @Entity
 @Table(name = "post")
 public class Post extends Publication {
-	@Setter(AccessLevel.NONE)
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "post", orphanRemoval = true)
+	@ToString.Exclude
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "post_id")
 	private List<PostCreation> creations = new ArrayList<>();
 
 	@Column(name = "title", nullable = false)

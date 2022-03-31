@@ -1,16 +1,9 @@
 package com.creativehub.backend.services.impl;
 
-import com.creativehub.backend.repositories.ArtworkRepository;
-import com.creativehub.backend.repositories.EventRepository;
-import com.creativehub.backend.repositories.PostRepository;
+import com.creativehub.backend.repositories.*;
 import com.creativehub.backend.services.PublicationsManager;
-import com.creativehub.backend.services.dto.ArtworkDto;
-import com.creativehub.backend.services.dto.EventDto;
-import com.creativehub.backend.services.dto.PostDto;
-import com.creativehub.backend.services.dto.PublicationDto;
-import com.creativehub.backend.services.mapper.ArtworkMapper;
-import com.creativehub.backend.services.mapper.EventMapper;
-import com.creativehub.backend.services.mapper.PostMapper;
+import com.creativehub.backend.services.dto.*;
+import com.creativehub.backend.services.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,9 +21,15 @@ public class PublicationsManagerImpl implements PublicationsManager {
 	private final ArtworkRepository artworkRepository;
 	private final EventRepository eventRepository;
 	private final PostRepository postRepository;
+	private final ArtworkCreationRepository artworkCreationRepository;
+	private final EventCreationRepository eventCreationRepository;
+	private final PostCreationRepository postCreationRepository;
 	private final ArtworkMapper artworkMapper;
 	private final EventMapper eventMapper;
 	private final PostMapper postMapper;
+	private final ArtworkCreationMapper artworkCreationMapper;
+	private final EventCreationMapper eventCreationMapper;
+	private final PostCreationMapper postCreationMapper;
 
 	@Override
 	public List<PublicationDto> getAllPublications() {
@@ -83,26 +82,62 @@ public class PublicationsManagerImpl implements PublicationsManager {
 	}
 
 	@Override
-	public Optional<ArtworkDto> deleteArtworkById(UUID id) {
-		return findArtworkById(id).map(artworkDto -> {
-			artworkRepository.deleteById(artworkDto.getId());
-			return artworkDto;
-		});
+	public void updateArtwork(UUID id, ArtworkDto artworkDto) {
+		artworkRepository.findById(id).ifPresent(artwork -> artworkMapper.updateArtworkFromArtworkDto(artworkDto, artwork));
 	}
 
 	@Override
-	public Optional<EventDto> deleteEventById(UUID id) {
-		return findEventById(id).map(eventDto -> {
-			eventRepository.deleteById(eventDto.getId());
-			return eventDto;
-		});
+	public void updateEvent(UUID id, EventDto eventDto) {
+		eventRepository.findById(id).ifPresent(event -> eventMapper.updateEventFromEventDto(eventDto, event));
 	}
 
 	@Override
-	public Optional<PostDto> deletePostById(UUID id) {
-		return findPostById(id).map(postDto -> {
-			postRepository.deleteById(postDto.getId());
-			return postDto;
-		});
+	public void updatePost(UUID id, PostDto postDto) {
+		postRepository.findById(id).ifPresent(post -> postMapper.updatePostFromPostDto(postDto, post));
+	}
+
+	@Override
+	public void deleteArtworkById(UUID id) {
+		artworkRepository.findById(id).ifPresent(artworkRepository::delete);
+	}
+
+	@Override
+	public void deleteEventById(UUID id) {
+		eventRepository.findById(id).ifPresent(eventRepository::delete);
+	}
+
+	@Override
+	public void deletePostById(UUID id) {
+		postRepository.findById(id).ifPresent(postRepository::delete);
+	}
+
+	@Override
+	public void deleteArtworkCreationById(UUID id) {
+		artworkCreationRepository.findById(id).ifPresent(artworkCreationRepository::delete);
+	}
+
+	@Override
+	public void deleteEventCreationById(UUID id) {
+		eventCreationRepository.findById(id).ifPresent(eventCreationRepository::delete);
+	}
+
+	@Override
+	public void deletePostCreationById(UUID id) {
+		postCreationRepository.findById(id).ifPresent(postCreationRepository::delete);
+	}
+
+	@Override
+	public ArtworkCreationDto saveArtworkCreation(ArtworkCreationDto artworkCreationDto) {
+		return artworkCreationMapper.artworkCreationToArtworkCreationDto(artworkCreationRepository.save(artworkCreationMapper.artworkCreationDtoToArtworkCreation(artworkCreationDto)));
+	}
+
+	@Override
+	public EventCreationDto saveEventCreation(EventCreationDto eventCreationDto) {
+		return eventCreationMapper.eventCreationToEventCreationDto(eventCreationRepository.save(eventCreationMapper.eventCreationDtoToEventCreation(eventCreationDto)));
+	}
+
+	@Override
+	public PostCreationDto savePostCreation(PostCreationDto postCreationDto) {
+		return postCreationMapper.postCreationToPostCreationDto(postCreationRepository.save(postCreationMapper.postCreationDtoToPostCreation(postCreationDto)));
 	}
 }

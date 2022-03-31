@@ -1,10 +1,7 @@
 package com.creativehub.backend.controllers;
 
 import com.creativehub.backend.services.PublicationsManager;
-import com.creativehub.backend.services.dto.ArtworkDto;
-import com.creativehub.backend.services.dto.EventDto;
-import com.creativehub.backend.services.dto.PostDto;
-import com.creativehub.backend.services.dto.PublicationDto;
+import com.creativehub.backend.services.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +36,14 @@ public class PublicationsController {
 		return ResponseEntity.of(publicationsManager.findArtworkById(id));
 	}
 
+	@PutMapping("/artworks/{id}")
+	public void updateArtwork(@PathVariable UUID id, @RequestBody ArtworkDto artworkDto) {
+		publicationsManager.updateArtwork(id, artworkDto);
+	}
+
 	@DeleteMapping("/artworks/{id}")
-	public ResponseEntity<ArtworkDto> deleteArtwork(@PathVariable UUID id) {
-		return ResponseEntity.of(publicationsManager.deleteArtworkById(id));
+	public void deleteArtwork(@PathVariable UUID id) {
+		publicationsManager.deleteArtworkById(id);
 	}
 
 	@GetMapping("/events/")
@@ -59,9 +61,14 @@ public class PublicationsController {
 		return ResponseEntity.of(publicationsManager.findEventById(id));
 	}
 
+	@PutMapping("/events/{id}")
+	public void updateEvent(@PathVariable UUID id, @RequestBody EventDto eventDto) {
+		publicationsManager.updateEvent(id, eventDto);
+	}
+
 	@DeleteMapping("/events/{id}")
-	public ResponseEntity<EventDto> deleteEvent(@PathVariable UUID id) {
-		return ResponseEntity.of(publicationsManager.deleteEventById(id));
+	public void deleteEvent(@PathVariable UUID id) {
+		publicationsManager.deleteEventById(id);
 	}
 
 	@GetMapping("/posts/")
@@ -79,8 +86,43 @@ public class PublicationsController {
 		return ResponseEntity.of(publicationsManager.findPostById(id));
 	}
 
+	@PutMapping("/posts/{id}")
+	public void updatePost(@PathVariable UUID id, @RequestBody PostDto postDto) {
+		publicationsManager.updatePost(id, postDto);
+	}
+
 	@DeleteMapping("/posts/{id}")
-	public ResponseEntity<PostDto> deletePost(@PathVariable UUID id) {
-		return ResponseEntity.of(publicationsManager.deletePostById(id));
+	public void deletePost(@PathVariable UUID id) {
+		publicationsManager.deletePostById(id);
+	}
+
+	@PostMapping("/creations/artwork/")
+	public ResponseEntity<ArtworkCreationDto> saveArtworkCreation(@RequestBody ArtworkCreationDto artworkCreationDto) {
+		return ResponseEntity.ok(publicationsManager.saveArtworkCreation(artworkCreationDto));
+	}
+
+	@DeleteMapping("/creations/artwork/{id}")
+	public void deleteArtworkCreation(@PathVariable UUID id) {
+		publicationsManager.deleteArtworkCreationById(id);
+	}
+
+	@PostMapping("/creations/event/")
+	public ResponseEntity<EventCreationDto> saveEventCreation(@RequestBody EventCreationDto eventCreationDto) {
+		return ResponseEntity.ok(publicationsManager.saveEventCreation(eventCreationDto));
+	}
+
+	@DeleteMapping("/creations/event/{id}")
+	public void deleteEventCreation(@PathVariable UUID id) {
+		publicationsManager.deleteEventCreationById(id);
+	}
+
+	@PostMapping("/creations/post/")
+	public ResponseEntity<PostCreationDto> savePostCreation(@RequestBody PostCreationDto postCreationDto) {
+		return ResponseEntity.ok(publicationsManager.savePostCreation(postCreationDto));
+	}
+
+	@DeleteMapping("/creations/post/{id}")
+	public void deletePostCreation(@PathVariable UUID id) {
+		publicationsManager.deletePostCreationById(id);
 	}
 }

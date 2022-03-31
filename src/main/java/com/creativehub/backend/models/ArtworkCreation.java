@@ -1,8 +1,13 @@
 package com.creativehub.backend.models;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -10,7 +15,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "artwork_creation")
 public class ArtworkCreation extends Creation {
-	@ManyToOne(cascade = CascadeType.ALL, optional = false)
-	@JoinColumn(name = "artwork_id", nullable = false)
-	private Artwork artwork;
+	@Column(name = "artwork_id", nullable = false, updatable = false)
+	private UUID artworkId;
 }

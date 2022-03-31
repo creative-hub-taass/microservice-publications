@@ -1,6 +1,5 @@
 package com.creativehub.backend.services.dto;
 
-import com.creativehub.backend.models.enums.CreationType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,12 +27,4 @@ public class ArtworkDto implements Serializable, PublicationDto {
 	private final Double price;
 	private final Currency currency;
 	private final Integer availableCopies;
-
-	@Data
-	public static class ArtworkCreationDto implements Serializable {
-		private final UUID id;
-		private final UUID user;
-		private final CreationType creationType;
-		private final String symbol;
-	}
 }

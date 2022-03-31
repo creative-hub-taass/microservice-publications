@@ -1,7 +1,9 @@
 package com.creativehub.backend.models;
 
 import com.creativehub.backend.models.enums.CreationType;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -12,12 +14,11 @@ import java.util.UUID;
 @MappedSuperclass
 public class Creation {
 	@Id
-	@Setter(AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", nullable = false)
+	@Column(name = "id", nullable = false, updatable = false)
 	private UUID id;
 
-	@Column(name = "user_id", nullable = false)
+	@Column(name = "user_id", nullable = false, updatable = false)
 	private UUID user;
 
 	@Enumerated(EnumType.STRING)

@@ -1,6 +1,5 @@
 package com.creativehub.backend.services.dto;
 
-import com.creativehub.backend.models.enums.CreationType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,14 +26,6 @@ public class EventDto implements Serializable, PublicationDto {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private final OffsetDateTime endDateTime;
 	private final URL bookingURL;
-
-	@Data
-	public static class EventCreationDto implements Serializable {
-		private final UUID id;
-		private final UUID user;
-		private final CreationType creationType;
-		private final String symbol;
-	}
 
 	@Data
 	public static class CoordinatesDto implements Serializable {
