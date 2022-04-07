@@ -26,5 +26,6 @@ public class ArtworkDto implements Serializable, PublicationDto {
 	private final Boolean onSale;
 	private final Double price;
 	private final Currency currency;
+	private final String paymentEmail;
 	private final Integer availableCopies;
 }

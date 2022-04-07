@@ -59,6 +59,9 @@ public class Artwork extends Publication {
 	@Column(name = "currency")
 	private Currency currency;
 
+	@Column(name = "payment_email")
+	private String paymentEmail;
+
 	@Column(name = "available_copies", nullable = false)
 	private Integer availableCopies;
 }
