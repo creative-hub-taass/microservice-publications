@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: microservice-publications
+  name: microservice-publications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: microservice-publications
+  strategy: { }
+  template:
+    metadata:
+      labels:
+        io.kompose.service: microservice-publications
+    spec:
+      containers:
+        - env:
+            - name: DB_HOST
+              value: db-publications
+            - name: DB_NAME
+              value: creative-hub-publications
+            - name: DB_PASSWORD
+              value: postgres
+            - name: DB_USERNAME
+              value: postgres
+          image: ghcr.io/creative-hub-taass/microservice-publications:latest
+          name: microservice-publications
+          ports:
+            - containerPort: 8080
+          resources: { }
+      restartPolicy: Always

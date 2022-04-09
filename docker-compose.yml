@@ -10,12 +10,13 @@ services:
       POSTGRES_PASSWORD: postgres
   microservice-publications:
     build: .
-    image: creative-hub/microservice-publications:latest
+    image: ghcr.io/creative-hub-taass/microservice-publications:latest
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-publications:5432/creative-hub-publications
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
+      - DB_HOST=db-publications
+      - DB_NAME=creative-hub-publications
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
     depends_on:
       - db-publications

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: db-publications
+  name: db-publications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: db-publications
+  strategy: { }
+  template:
+    metadata:
+      labels:
+        io.kompose.service: db-publications
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: creative-hub-publications
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+          image: postgres:alpine
+          name: db-publications
+          ports:
+            - containerPort: 5432
+          resources: { }
+      restartPolicy: Always
