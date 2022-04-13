@@ -13,41 +13,46 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/publications")
+@RequestMapping("/api/v1/publications/posts")
 public class PostsController {
 	private final PostsManager postsManager;
 
-	@GetMapping("/posts/")
+	@GetMapping("/")
 	public List<PostDto> getAllPosts() {
 		return postsManager.getAllPosts();
 	}
 
-	@PostMapping("/posts/")
+	@GetMapping("/creator/{uid}")
+	public List<PostDto> getAllPostsByCreator(@PathVariable UUID uid) {
+		return postsManager.getAllPostsByCreator(uid);
+	}
+
+	@PostMapping("/")
 	public ResponseEntity<PostDto> savePost(@RequestBody PostDto postDto) {
 		return postsManager.savePost(postDto);
 	}
 
-	@GetMapping("/posts/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<PostDto> getPost(@PathVariable UUID id) {
 		return ResponseEntity.of(postsManager.findPostById(id));
 	}
 
-	@PutMapping("/posts/{id}")
+	@PutMapping("/{id}")
 	public void updatePost(@PathVariable UUID id, @RequestBody PostDto postDto) {
 		postsManager.updatePost(id, postDto);
 	}
 
-	@DeleteMapping("/posts/{id}")
+	@DeleteMapping("/{id}")
 	public void deletePost(@PathVariable UUID id) {
 		postsManager.deletePostById(id);
 	}
 
-	@PostMapping("/creations/post/")
+	@PostMapping("/creations/")
 	public ResponseEntity<PostCreationDto> savePostCreation(@RequestBody PostCreationDto postCreationDto) {
 		return ResponseEntity.ok(postsManager.savePostCreation(postCreationDto));
 	}
 
-	@DeleteMapping("/creations/post/{id}")
+	@DeleteMapping("/creations/{id}")
 	public void deletePostCreation(@PathVariable UUID id) {
 		postsManager.deletePostCreationById(id);
 	}

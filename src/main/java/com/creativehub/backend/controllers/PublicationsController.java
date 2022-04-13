@@ -3,12 +3,10 @@ package com.creativehub.backend.controllers;
 import com.creativehub.backend.services.PublicationsManager;
 import com.creativehub.backend.services.dto.PublicationDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @CrossOrigin
@@ -20,5 +18,10 @@ public class PublicationsController {
 	@GetMapping("/")
 	public List<PublicationDto> getAllPublications() {
 		return publicationsManager.getAllPublications();
+	}
+
+	@GetMapping("/creator/{uid}")
+	public List<PublicationDto> getAllPublicationsByCreator(@PathVariable UUID uid) {
+		return publicationsManager.getAllPublicationsByCreator(uid);
 	}
 }

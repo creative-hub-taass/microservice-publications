@@ -13,41 +13,46 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/publications")
+@RequestMapping("/api/v1/publications/events")
 public class EventsController {
 	private final EventsManager eventsManager;
 
-	@GetMapping("/events/")
+	@GetMapping("/")
 	public List<EventDto> getAllEvents() {
 		return eventsManager.getAllEvents();
 	}
 
-	@PostMapping("/events/")
+	@GetMapping("/creator/{uid}")
+	public List<EventDto> getAllEventsByCreator(@PathVariable UUID uid) {
+		return eventsManager.getAllEventsByCreator(uid);
+	}
+
+	@PostMapping("/")
 	public ResponseEntity<EventDto> saveEvent(@RequestBody EventDto eventDto) {
 		return eventsManager.saveEvent(eventDto);
 	}
 
-	@GetMapping("/events/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<EventDto> getEvent(@PathVariable UUID id) {
 		return ResponseEntity.of(eventsManager.findEventById(id));
 	}
 
-	@PutMapping("/events/{id}")
+	@PutMapping("/{id}")
 	public void updateEvent(@PathVariable UUID id, @RequestBody EventDto eventDto) {
 		eventsManager.updateEvent(id, eventDto);
 	}
 
-	@DeleteMapping("/events/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteEvent(@PathVariable UUID id) {
 		eventsManager.deleteEventById(id);
 	}
 
-	@PostMapping("/creations/event/")
+	@PostMapping("/creations/")
 	public ResponseEntity<EventCreationDto> saveEventCreation(@RequestBody EventCreationDto eventCreationDto) {
 		return ResponseEntity.ok(eventsManager.saveEventCreation(eventCreationDto));
 	}
 
-	@DeleteMapping("/creations/event/{id}")
+	@DeleteMapping("/creations/{id}")
 	public void deleteEventCreation(@PathVariable UUID id) {
 		eventsManager.deleteEventCreationById(id);
 	}

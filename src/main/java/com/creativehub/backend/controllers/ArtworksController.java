@@ -13,41 +13,46 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/publications")
+@RequestMapping("/api/v1/publications/artworks")
 public class ArtworksController {
 	private final ArtworksManager artworksManager;
 
-	@GetMapping("/artworks/")
+	@GetMapping("/")
 	public List<ArtworkDto> getAllArtworks() {
 		return artworksManager.getAllArtworks();
 	}
 
-	@PostMapping("/artworks/")
+	@GetMapping("/creator/{uid}")
+	public List<ArtworkDto> getAllArtworksByCreator(@PathVariable UUID uid) {
+		return artworksManager.getAllArtworksByCreator(uid);
+	}
+
+	@PostMapping("/")
 	public ResponseEntity<ArtworkDto> saveArtwork(@RequestBody ArtworkDto artworkDto) {
 		return artworksManager.saveArtwork(artworkDto);
 	}
 
-	@GetMapping("/artworks/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<ArtworkDto> getArtwork(@PathVariable UUID id) {
 		return ResponseEntity.of(artworksManager.findArtworkById(id));
 	}
 
-	@PutMapping("/artworks/{id}")
+	@PutMapping("/{id}")
 	public void updateArtwork(@PathVariable UUID id, @RequestBody ArtworkDto artworkDto) {
 		artworksManager.updateArtwork(id, artworkDto);
 	}
 
-	@DeleteMapping("/artworks/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteArtwork(@PathVariable UUID id) {
 		artworksManager.deleteArtworkById(id);
 	}
 
-	@PostMapping("/creations/artwork/")
+	@PostMapping("/creations/")
 	public ResponseEntity<ArtworkCreationDto> saveArtworkCreation(@RequestBody ArtworkCreationDto artworkCreationDto) {
 		return ResponseEntity.ok(artworksManager.saveArtworkCreation(artworkCreationDto));
 	}
 
-	@DeleteMapping("/creations/artwork/{id}")
+	@DeleteMapping("/creations/{id}")
 	public void deleteArtworkCreation(@PathVariable UUID id) {
 		artworksManager.deleteArtworkCreationById(id);
 	}
