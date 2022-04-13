@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface ArtworksManager {
 	List<ArtworkDto> getAllArtworks();
 
+	List<ArtworkDto> getAllArtworksByCreator(UUID userId);
+
 	Optional<ArtworkDto> findArtworkById(UUID uuid);
 
 	ResponseEntity<ArtworkDto> saveArtwork(ArtworkDto artworkDto);

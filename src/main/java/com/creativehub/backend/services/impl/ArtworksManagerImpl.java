@@ -26,7 +26,12 @@ public class ArtworksManagerImpl implements ArtworksManager {
 
 	@Override
 	public List<ArtworkDto> getAllArtworks() {
-		return artworkRepository.findAll().stream().map(artworkMapper::artworkToArtworkDto).collect(Collectors.toList());
+		return artworkRepository.findAllOrdered().stream().map(artworkMapper::artworkToArtworkDto).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<ArtworkDto> getAllArtworksByCreator(UUID userId) {
+		return artworkRepository.findAllByCreator(userId).stream().map(artworkMapper::artworkToArtworkDto).collect(Collectors.toList());
 	}
 
 	@Override

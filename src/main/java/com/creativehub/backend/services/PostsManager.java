@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface PostsManager {
 	List<PostDto> getAllPosts();
 
+	List<PostDto> getAllPostsByCreator(UUID userId);
+
 	Optional<PostDto> findPostById(UUID uuid);
 
 	ResponseEntity<PostDto> savePost(PostDto postDto);

@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface EventsManager {
 	List<EventDto> getAllEvents();
 
+	List<EventDto> getAllEventsByCreator(UUID userId);
+
 	Optional<EventDto> findEventById(UUID uuid);
 
 	ResponseEntity<EventDto> saveEvent(EventDto eventDto);

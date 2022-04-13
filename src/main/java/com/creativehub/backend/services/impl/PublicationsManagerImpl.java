@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,6 +24,13 @@ public class PublicationsManagerImpl implements PublicationsManager {
 	@Override
 	public List<PublicationDto> getAllPublications() {
 		return Stream.of(artworksManager.getAllArtworks(), eventsManager.getAllEvents(), postsManager.getAllPosts())
+				.flatMap(Collection::stream)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<PublicationDto> getAllPublicationsByCreator(UUID userId) {
+		return Stream.of(artworksManager.getAllArtworksByCreator(userId), eventsManager.getAllEventsByCreator(userId), postsManager.getAllPostsByCreator(userId))
 				.flatMap(Collection::stream)
 				.collect(Collectors.toList());
 	}

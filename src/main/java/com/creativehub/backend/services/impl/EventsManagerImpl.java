@@ -30,6 +30,11 @@ public class EventsManagerImpl implements EventsManager {
 	}
 
 	@Override
+	public List<EventDto> getAllEventsByCreator(UUID userId) {
+		return eventRepository.findAllByCreator(userId).stream().map(eventMapper::eventToEventDto).collect(Collectors.toList());
+	}
+
+	@Override
 	public Optional<EventDto> findEventById(UUID id) {
 		return eventRepository.findById(id).map(eventMapper::eventToEventDto);
 	}

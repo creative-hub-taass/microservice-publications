@@ -30,6 +30,11 @@ public class PostsManagerImpl implements PostsManager {
 	}
 
 	@Override
+	public List<PostDto> getAllPostsByCreator(UUID userId) {
+		return postRepository.findAllByCreator(userId).stream().map(postMapper::postToPostDto).collect(Collectors.toList());
+	}
+
+	@Override
 	public Optional<PostDto> findPostById(UUID id) {
 		return postRepository.findById(id).map(postMapper::postToPostDto);
 	}
