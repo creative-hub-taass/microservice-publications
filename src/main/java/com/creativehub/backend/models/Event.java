@@ -24,12 +24,10 @@ public class Event extends Publication {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Lob
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private String description;
 
-	@Lob
-	@Column(name = "image", nullable = false)
+	@Column(name = "image", nullable = false, columnDefinition = "TEXT")
 	private String image;
 
 	@Column(name = "location_name", nullable = false)
