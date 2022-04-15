@@ -18,6 +18,7 @@ services:
       - DB_NAME=creative-hub-publications
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
+      - DEMO_VERSION=true
       - JAVA_ARGS=$JAVA_ARGS
     depends_on:
       - db-publications

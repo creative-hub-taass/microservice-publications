@@ -25,6 +25,8 @@ spec:
               value: postgres
             - name: DB_USERNAME
               value: postgres
+            - name: DEMO_VERSION
+              value: "true"
           image: ghcr.io/creative-hub-taass/microservice-publications:latest
           name: microservice-publications
           ports:
