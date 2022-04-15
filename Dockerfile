@@ -13,4 +13,5 @@ FROM openjdk:17-alpine
 WORKDIR /app
 EXPOSE 8080
 COPY --from=build /app/target/*.jar appbootrest.jar
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "appbootrest.jar"]
+ENV JAVA_ARGS=""
+ENTRYPOINT java $JAVA_ARGS -Djava.security.egd=file:/dev/./urandom -jar appbootrest.jar

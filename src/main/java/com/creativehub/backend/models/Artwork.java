@@ -27,8 +27,7 @@ public class Artwork extends Publication {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Lob
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private String description;
 
 	@Column(name = "type", nullable = false)
@@ -46,7 +45,7 @@ public class Artwork extends Publication {
 
 	@ToString.Exclude
 	@ElementCollection
-	@Column(name = "image", nullable = false)
+	@Column(name = "image", nullable = false, columnDefinition = "TEXT")
 	@CollectionTable(name = "artwork_images", joinColumns = @JoinColumn(name = "owner_id"))
 	private Set<String> images = new LinkedHashSet<>();
 

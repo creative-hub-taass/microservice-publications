@@ -5,8 +5,8 @@ import com.creativehub.backend.services.dto.PublicationDto;
 import java.util.List;
 import java.util.UUID;
 
-public interface PublicationsManager {
-	List<PublicationDto> getAllPublications();
+public interface FeedManager {
+	List<PublicationDto> getPublicFeed();
 
-	List<PublicationDto> getAllPublicationsByCreator(UUID userId);
+	List<PublicationDto> getUserFeed(UUID userId);
 }
