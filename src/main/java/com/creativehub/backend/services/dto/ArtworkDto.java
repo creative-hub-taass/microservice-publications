@@ -19,7 +19,6 @@ public class ArtworkDto implements Serializable, PublicationDto {
 	private final String name;
 	private final String description;
 	private final String type;
-	private final String size;
 	private final Integer copies;
 	private final Map<String, String> attributes;
 	private final Set<String> images;
