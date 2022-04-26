@@ -32,7 +32,7 @@ public class FeedManagerImpl implements FeedManager {
 
 	@Override
 	public List<PublicationDto> getUserFeed(UUID userId, @Nullable Integer limit) {
-		UserDto user = apiClient.post()
+		UserDto user = apiClient.get()
 				.uri("http://microservice-users:8080/api/v1/users/" + userId.toString())
 				.retrieve()
 				.bodyToMono(UserDto.class)
@@ -65,7 +65,7 @@ public class FeedManagerImpl implements FeedManager {
 		}
 
 		private void getLikes() {
-			Integer likes = apiClient.post()
+			Integer likes = apiClient.get()
 					.uri("http://microservice-interactions:8080/api/v1/interactions/likes/count/" + publication.getId().toString())
 					.retrieve()
 					.bodyToMono(Integer.class)
@@ -74,7 +74,7 @@ public class FeedManagerImpl implements FeedManager {
 		}
 
 		private void getLiked() {
-			Boolean liked = apiClient.post()
+			Boolean liked = apiClient.get()
 					.uri("http://microservice-interactions:8080/api/v1/interactions/userliked/" + user.getId().toString() + "/" + publication.getId().toString())
 					.retrieve()
 					.bodyToMono(Boolean.class)
