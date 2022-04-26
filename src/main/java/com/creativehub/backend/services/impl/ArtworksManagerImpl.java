@@ -63,4 +63,9 @@ public class ArtworksManagerImpl implements ArtworksManager {
 	public ArtworkCreationDto saveArtworkCreation(ArtworkCreationDto artworkCreationDto) {
 		return artworkCreationMapper.artworkCreationToArtworkCreationDto(artworkCreationRepository.save(artworkCreationMapper.artworkCreationDtoToArtworkCreation(artworkCreationDto)));
 	}
+
+	@Override
+	public void deleteAllArtworksByCreator(UUID id) {
+		artworkRepository.deleteAllByCreator(id);
+	}
 }
