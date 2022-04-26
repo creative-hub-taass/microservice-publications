@@ -19,5 +19,5 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 	@Transactional
 	@Modifying
 	@Query("delete from Post p where exists (select true from p.creations c where c.user = :creator)")
-	void deleteAllByCreator(UUID id);
+	void deleteAllByCreator(UUID creator);
 }

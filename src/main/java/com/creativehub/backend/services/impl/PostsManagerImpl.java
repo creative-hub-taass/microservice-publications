@@ -26,7 +26,7 @@ public class PostsManagerImpl implements PostsManager {
 
 	@Override
 	public List<PostDto> getAllPosts() {
-		return postRepository.findAll().stream().map(postMapper::postToPostDto).collect(Collectors.toList());
+		return postRepository.findAllOrdered().stream().map(postMapper::postToPostDto).collect(Collectors.toList());
 	}
 
 	@Override

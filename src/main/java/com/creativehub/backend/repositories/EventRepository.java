@@ -19,5 +19,5 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 	@Transactional
 	@Modifying
 	@Query("delete from Event e where exists (select true from e.creations c where c.user = :creator)")
-	void deleteAllByCreator(UUID id);
+	void deleteAllByCreator(UUID creator);
 }

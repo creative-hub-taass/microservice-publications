@@ -26,7 +26,7 @@ public class EventsManagerImpl implements EventsManager {
 
 	@Override
 	public List<EventDto> getAllEvents() {
-		return eventRepository.findAll().stream().map(eventMapper::eventToEventDto).collect(Collectors.toList());
+		return eventRepository.findAllOrdered().stream().map(eventMapper::eventToEventDto).collect(Collectors.toList());
 	}
 
 	@Override
