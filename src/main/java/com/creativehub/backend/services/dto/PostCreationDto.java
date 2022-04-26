@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Data
-public class PostCreationDto implements Serializable {
+public class PostCreationDto implements Serializable, CreationDto {
 	private final UUID id;
 	private final UUID user;
 	private final CreationType creationType;

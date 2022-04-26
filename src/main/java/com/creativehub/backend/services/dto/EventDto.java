@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +27,11 @@ public class EventDto implements Serializable, PublicationDto {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private final OffsetDateTime endDateTime;
 	private final URL bookingURL;
+
+	@Override
+	public long getTime() {
+		return startDateTime.getLong(ChronoField.INSTANT_SECONDS);
+	}
 
 	@Data
 	public static class CoordinatesDto implements Serializable {

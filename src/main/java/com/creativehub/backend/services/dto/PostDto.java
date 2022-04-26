@@ -15,4 +15,9 @@ public class PostDto implements Serializable, PublicationDto {
 	private final List<PostCreationDto> creations;
 	private final String title;
 	private final String body;
+
+	@Override
+	public long getTime() {
+		return lastUpdate.getEpochSecond();
+	}
 }

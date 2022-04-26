@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoField;
 import java.util.*;
 
 @Data
@@ -27,4 +28,9 @@ public class ArtworkDto implements Serializable, PublicationDto {
 	private final Currency currency;
 	private final String paymentEmail;
 	private final Integer availableCopies;
+
+	@Override
+	public long getTime() {
+		return creationDateTime.getLong(ChronoField.INSTANT_SECONDS);
+	}
 }

@@ -16,12 +16,12 @@ public class FeedController {
 	private final FeedManager feedManager;
 
 	@GetMapping("/")
-	public List<PublicationDto> getPublicFeed() {
-		return feedManager.getPublicFeed();
+	public List<PublicationDto> getPublicFeed(@RequestParam(value = "limit", required = false) Integer limit) {
+		return feedManager.getPublicFeed(limit);
 	}
 
 	@GetMapping("/{uid}")
-	public List<PublicationDto> getUserFeed(@PathVariable UUID uid) {
-		return feedManager.getUserFeed(uid);
+	public List<PublicationDto> getUserFeed(@PathVariable UUID uid, @RequestParam(value = "limit", required = false) Integer limit) {
+		return feedManager.getUserFeed(uid, limit);
 	}
 }

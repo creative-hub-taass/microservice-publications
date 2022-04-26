@@ -6,6 +6,7 @@ import com.creativehub.backend.services.PostsManager;
 import com.creativehub.backend.services.PublicationsManager;
 import com.creativehub.backend.services.dto.PublicationDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -25,6 +26,16 @@ public class PublicationsManagerImpl implements PublicationsManager {
 	public List<PublicationDto> getAllPublications() {
 		return Stream.of(artworksManager.getAllArtworks(), eventsManager.getAllEvents(), postsManager.getAllPosts())
 				.flatMap(Collection::stream)
+				.sorted()
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<PublicationDto> getAllPublications(@Nullable Integer limit) {
+		return Stream.of(artworksManager.getAllArtworks(), eventsManager.getAllEvents(), postsManager.getAllPosts())
+				.flatMap(Collection::stream)
+				.sorted()
+				.limit(limit != null ? limit : Integer.MAX_VALUE)
 				.collect(Collectors.toList());
 	}
 
@@ -32,6 +43,7 @@ public class PublicationsManagerImpl implements PublicationsManager {
 	public List<PublicationDto> getAllPublicationsByCreator(UUID userId) {
 		return Stream.of(artworksManager.getAllArtworksByCreator(userId), eventsManager.getAllEventsByCreator(userId), postsManager.getAllPostsByCreator(userId))
 				.flatMap(Collection::stream)
+				.sorted()
 				.collect(Collectors.toList());
 	}
 }
