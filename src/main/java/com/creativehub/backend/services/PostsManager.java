@@ -24,4 +24,6 @@ public interface PostsManager {
 	void deletePostCreationById(UUID id);
 
 	PostCreationDto savePostCreation(PostCreationDto postCreationDto);
+
+	void deleteAllPostsByCreator(UUID id);
 }

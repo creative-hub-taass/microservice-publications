@@ -24,4 +24,6 @@ public interface ArtworksManager {
 	void deleteArtworkCreationById(UUID id);
 
 	ArtworkCreationDto saveArtworkCreation(ArtworkCreationDto artworkCreationDto);
+
+	void deleteAllArtworksByCreator(UUID id);
 }

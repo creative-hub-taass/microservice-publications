@@ -24,4 +24,6 @@ public interface EventsManager {
 	void deleteEventCreationById(UUID id);
 
 	EventCreationDto saveEventCreation(EventCreationDto eventCreationDto);
+
+	void deleteAllEventsByCreator(UUID id);
 }

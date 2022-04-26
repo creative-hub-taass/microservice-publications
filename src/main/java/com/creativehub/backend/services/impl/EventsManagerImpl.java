@@ -63,4 +63,9 @@ public class EventsManagerImpl implements EventsManager {
 	public EventCreationDto saveEventCreation(EventCreationDto eventCreationDto) {
 		return eventCreationMapper.eventCreationToEventCreationDto(eventCreationRepository.save(eventCreationMapper.eventCreationDtoToEventCreation(eventCreationDto)));
 	}
+
+	@Override
+	public void deleteAllEventsByCreator(UUID id) {
+		eventRepository.deleteAllByCreator(id);
+	}
 }

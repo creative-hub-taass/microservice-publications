@@ -63,4 +63,9 @@ public class PostsManagerImpl implements PostsManager {
 	public PostCreationDto savePostCreation(PostCreationDto postCreationDto) {
 		return postCreationMapper.postCreationToPostCreationDto(postCreationRepository.save(postCreationMapper.postCreationDtoToPostCreation(postCreationDto)));
 	}
+
+	@Override
+	public void deleteAllPostsByCreator(UUID id) {
+		postRepository.deleteAllByCreator(id);
+	}
 }
