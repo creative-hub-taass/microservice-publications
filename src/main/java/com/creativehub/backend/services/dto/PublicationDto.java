@@ -13,5 +13,5 @@ public interface PublicationDto extends Comparable<PublicationDto> {
 
 	UUID getId();
 
-	List<CreationDto> getCreations();
+	List<? extends CreationDto> getCreations();
 }
