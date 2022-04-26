@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.List;
@@ -27,7 +29,12 @@ public class FeedManagerImpl implements FeedManager {
 
 	@Override
 	public List<PublicationDto> getPublicFeed(@Nullable Integer limit) {
-		return publicationsManager.getAllPublications(limit);
+		return publicationsManager.getAllPublications().stream()
+				.map(publication -> new PublicationWithMetadata(null, publication))
+				.sorted()
+				.limit(limit != null ? limit : Integer.MAX_VALUE)
+				.map(PublicationWithMetadata::getPublication)
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -36,23 +43,29 @@ public class FeedManagerImpl implements FeedManager {
 				.uri("http://microservice-users:8080/api/v1/users/" + userId.toString())
 				.retrieve()
 				.bodyToMono(UserDto.class)
+				.onErrorResume(WebClientResponseException.NotFound.class, e -> {
+					e.printStackTrace();
+					return Mono.empty();
+				})
 				.block(REQUEST_TIMEOUT);
-		return publicationsManager.getAllPublications(limit).stream()
+		return publicationsManager.getAllPublications().stream()
 				.map(publication -> new PublicationWithMetadata(user, publication))
 				.sorted()
+				.limit(limit != null ? limit : Integer.MAX_VALUE)
 				.map(PublicationWithMetadata::getPublication)
 				.collect(Collectors.toList());
 	}
 
 	@Getter
 	private static class PublicationWithMetadata implements Comparable<PublicationWithMetadata> {
+		@Nullable
 		private final UserDto user;
 		private final PublicationDto publication;
 		private int likes;
 		private boolean liked;
 		private boolean followed;
 
-		private PublicationWithMetadata(UserDto user, PublicationDto publication) {
+		private PublicationWithMetadata(@Nullable UserDto user, PublicationDto publication) {
 			this.user = user;
 			this.publication = publication;
 			getMetadata();
@@ -74,17 +87,21 @@ public class FeedManagerImpl implements FeedManager {
 		}
 
 		private void getLiked() {
-			Boolean liked = apiClient.get()
-					.uri("http://microservice-interactions:8080/api/v1/interactions/userliked/" + user.getId().toString() + "/" + publication.getId().toString())
-					.retrieve()
-					.bodyToMono(Boolean.class)
-					.block(REQUEST_TIMEOUT);
-			if (liked != null) this.liked = liked;
+			if (user != null) {
+				Boolean liked = apiClient.get()
+						.uri("http://microservice-interactions:8080/api/v1/interactions/userliked/" + user.getId().toString() + "/" + publication.getId().toString())
+						.retrieve()
+						.bodyToMono(Boolean.class)
+						.block(REQUEST_TIMEOUT);
+				if (liked != null) this.liked = liked;
+			}
 		}
 
 		private void getFollowed() {
-			List<UUID> creators = publication.getCreations().stream().map(CreationDto::getUser).collect(Collectors.toList());
-			followed = user.getInspirerIds().stream().anyMatch(creators::contains);
+			if (user != null) {
+				List<UUID> creators = publication.getCreations().stream().map(CreationDto::getUser).collect(Collectors.toList());
+				followed = user.getInspirerIds().stream().anyMatch(creators::contains);
+			}
 		}
 
 		@Override

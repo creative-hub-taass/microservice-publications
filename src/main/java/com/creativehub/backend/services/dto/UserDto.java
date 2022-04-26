@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Reduced version on UserDto
+ * Reduced version of UserDto
  */
 @Data
 @NoArgsConstructor
