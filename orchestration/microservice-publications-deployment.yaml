@@ -25,6 +25,14 @@ spec:
               value: postgres
             - name: DB_USERNAME
               value: postgres
+            - name: RABBITMQ_HOST
+              value: rabbitmq
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_USERNAME
+              value: guest
+            - name: RABBITMQ_PASSWORD
+              value: guest
           image: ghcr.io/creative-hub-taass/microservice-publications:latest
           name: microservice-publications
           ports:

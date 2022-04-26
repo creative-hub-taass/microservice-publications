@@ -18,6 +18,10 @@ services:
       - DB_NAME=creative-hub-publications
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
       - JAVA_ARGS=$JAVA_ARGS
     depends_on:
       - db-publications
