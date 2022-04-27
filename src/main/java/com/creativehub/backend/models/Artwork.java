@@ -16,9 +16,7 @@ import java.util.*;
 @Table(name = "artwork")
 @Check(constraints = "((on_sale = FALSE) OR (price IS NOT NULL)) AND ((price IS NULL) = (currency IS NULL))")
 public class Artwork extends Publication {
-	@ToString.Exclude
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "artwork_id")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "artwork", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ArtworkCreation> creations = new ArrayList<>();
 
 	@Column(name = "creation_date_time", nullable = false)

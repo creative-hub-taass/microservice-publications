@@ -21,8 +21,12 @@ public class ConsumerServiceImpl implements ConsumerService {
 	@Override
 	@RabbitListener(queues = "${spring.rabbitmq.queue}")
 	public void receivedMessage(UUID id) {
-		artworksManager.deleteAllArtworksByCreator(id);
-		eventsManager.deleteAllEventsByCreator(id);
-		postsManager.deleteAllPostsByCreator(id);
+		try {
+			artworksManager.deleteAllArtworksByCreator(id);
+			eventsManager.deleteAllEventsByCreator(id);
+			postsManager.deleteAllPostsByCreator(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

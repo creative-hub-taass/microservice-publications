@@ -17,8 +17,7 @@ import java.util.List;
 @Table(name = "event")
 public class Event extends Publication {
 	@ToString.Exclude
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "event_id")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<EventCreation> creations = new ArrayList<>();
 
 	@Column(name = "name", nullable = false)
