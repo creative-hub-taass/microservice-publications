@@ -79,7 +79,7 @@ public class FeedManagerImpl implements FeedManager {
 
 		private void getLikes() {
 			Integer likes = apiClient.get()
-					.uri("http://microservice-interactions:8080/api/v1/interactions/likes/count/" + publication.getId().toString())
+					.uri("http://microservice-interactions:8080/api/v1/interactions/-/likes/count/" + publication.getId().toString())
 					.retrieve()
 					.bodyToMono(Integer.class)
 					.block(REQUEST_TIMEOUT);
