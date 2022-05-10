@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static java.lang.Math.signum;
+import static java.lang.Integer.signum;
 
 @RequiredArgsConstructor
 @Service
@@ -58,6 +58,7 @@ public class FeedManagerImpl implements FeedManager {
 
 	@Getter
 	private static class PublicationWithMetadata implements Comparable<PublicationWithMetadata> {
+		private static final int TIME_DIVIDER = 7 * 24 * 60 * 60 * 1000; // WEEk
 		@Nullable
 		private final UserDto user;
 		private final PublicationDto publication;
@@ -104,15 +105,20 @@ public class FeedManagerImpl implements FeedManager {
 			}
 		}
 
+		private int getScore() {
+			return (likes + 1) * (1 + (liked ? 1 : 0) + (followed ? 1 : 0));
+		}
+
 		@Override
 		public int compareTo(PublicationWithMetadata other) {
-			int pubCompare = publication.compareTo(other.publication);
-			int likesCompare = likes - other.likes;
-			int likedCompare = (liked ? 1 : -1) - (other.liked ? 1 : -1);
-			int followedCompare = (followed ? 1 : -1) - (other.followed ? 1 : -1);
-			return (int) (1000.0 * (
-					signum(pubCompare) + signum(likesCompare) + signum(likedCompare) + signum(followedCompare)
-			));
+			long time = (publication.getTime() / TIME_DIVIDER) - (other.publication.getTime() / TIME_DIVIDER);
+			if (time == 0) {
+				int score = signum(getScore() - other.getScore());
+				if (score == 0) {
+					time = (publication.getTime() % TIME_DIVIDER) - (other.publication.getTime() % TIME_DIVIDER);
+					return signum((int) time);
+				} else return score;
+			} else return signum((int) time);
 		}
 	}
 }
