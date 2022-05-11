@@ -45,8 +45,11 @@ public class EventsManagerImpl implements EventsManager {
 	}
 
 	@Override
-	public void updateEvent(UUID id, EventDto eventDto) {
-		eventRepository.findById(id).ifPresent(event -> eventMapper.updateEventFromEventDto(eventDto, event));
+	public Optional<EventDto> updateEvent(UUID id, EventDto eventDto) {
+		return eventRepository.findById(id).map(event -> {
+			eventMapper.updateEventFromEventDto(eventDto, event);
+			return eventMapper.eventToEventDto(eventRepository.save(event));
+		});
 	}
 
 	@Override

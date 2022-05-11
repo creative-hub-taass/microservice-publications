@@ -17,7 +17,7 @@ public interface PostsManager {
 
 	ResponseEntity<PostDto> savePost(PostDto postDto);
 
-	void updatePost(UUID id, PostDto postDto);
+	Optional<PostDto> updatePost(UUID id, PostDto postDto);
 
 	void deletePostById(UUID id);
 

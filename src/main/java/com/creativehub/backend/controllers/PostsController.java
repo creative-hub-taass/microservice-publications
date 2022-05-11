@@ -38,8 +38,8 @@ public class PostsController {
 	}
 
 	@PutMapping("/posts/{id}")
-	public void updatePost(@PathVariable UUID id, @RequestBody PostDto postDto) {
-		postsManager.updatePost(id, postDto);
+	public ResponseEntity<PostDto> updatePost(@PathVariable UUID id, @RequestBody PostDto postDto) {
+		return ResponseEntity.of(postsManager.updatePost(id, postDto));
 	}
 
 	@DeleteMapping("/posts/{id}")

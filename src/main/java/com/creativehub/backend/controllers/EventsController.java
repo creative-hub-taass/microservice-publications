@@ -38,8 +38,8 @@ public class EventsController {
 	}
 
 	@PutMapping("/events/{id}")
-	public void updateEvent(@PathVariable UUID id, @RequestBody EventDto eventDto) {
-		eventsManager.updateEvent(id, eventDto);
+	public ResponseEntity<EventDto> updateEvent(@PathVariable UUID id, @RequestBody EventDto eventDto) {
+		return ResponseEntity.of(eventsManager.updateEvent(id, eventDto));
 	}
 
 	@DeleteMapping("/events/{id}")

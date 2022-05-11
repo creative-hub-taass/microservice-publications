@@ -17,7 +17,7 @@ public interface EventsManager {
 
 	ResponseEntity<EventDto> saveEvent(EventDto eventDto);
 
-	void updateEvent(UUID id, EventDto postDto);
+	Optional<EventDto> updateEvent(UUID id, EventDto postDto);
 
 	void deleteEventById(UUID id);
 

@@ -17,7 +17,7 @@ public interface ArtworksManager {
 
 	ResponseEntity<ArtworkDto> saveArtwork(ArtworkDto artworkDto);
 
-	void updateArtwork(UUID id, ArtworkDto artworkDto);
+	Optional<ArtworkDto> updateArtwork(UUID id, ArtworkDto artworkDto);
 
 	void deleteArtworkById(UUID id);
 

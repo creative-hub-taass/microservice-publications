@@ -45,8 +45,11 @@ public class PostsManagerImpl implements PostsManager {
 	}
 
 	@Override
-	public void updatePost(UUID id, PostDto postDto) {
-		postRepository.findById(id).ifPresent(post -> postMapper.updatePostFromPostDto(postDto, post));
+	public Optional<PostDto> updatePost(UUID id, PostDto postDto) {
+		return postRepository.findById(id).map(post -> {
+			postMapper.updatePostFromPostDto(postDto, post);
+			return postMapper.postToPostDto(postRepository.save(post));
+		});
 	}
 
 	@Override

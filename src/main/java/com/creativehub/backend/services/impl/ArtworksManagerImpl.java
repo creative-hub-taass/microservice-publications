@@ -45,8 +45,11 @@ public class ArtworksManagerImpl implements ArtworksManager {
 	}
 
 	@Override
-	public void updateArtwork(UUID id, ArtworkDto artworkDto) {
-		artworkRepository.findById(id).ifPresent(artwork -> artworkMapper.updateArtworkFromArtworkDto(artworkDto, artwork));
+	public Optional<ArtworkDto> updateArtwork(UUID id, ArtworkDto artworkDto) {
+		return artworkRepository.findById(id).map(artwork -> {
+			artworkMapper.updateArtworkFromArtworkDto(artworkDto, artwork);
+			return artworkMapper.artworkToArtworkDto(artworkRepository.save(artwork));
+		});
 	}
 
 	@Override

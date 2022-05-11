@@ -38,8 +38,8 @@ public class ArtworksController {
 	}
 
 	@PutMapping("/artworks/{id}")
-	public void updateArtwork(@PathVariable UUID id, @RequestBody ArtworkDto artworkDto) {
-		artworksManager.updateArtwork(id, artworkDto);
+	public ResponseEntity<ArtworkDto> updateArtwork(@PathVariable UUID id, @RequestBody ArtworkDto artworkDto) {
+		return ResponseEntity.of(artworksManager.updateArtwork(id, artworkDto));
 	}
 
 	@DeleteMapping("/artworks/{id}")
