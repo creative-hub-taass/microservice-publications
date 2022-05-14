@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,6 +29,7 @@ public class EventDto implements Serializable, PublicationDto {
 	private final OffsetDateTime endDateTime;
 	private final URL bookingURL;
 
+	@JsonIgnore
 	@Override
 	public long getTime() {
 		return startDateTime.getLong(ChronoField.INSTANT_SECONDS);

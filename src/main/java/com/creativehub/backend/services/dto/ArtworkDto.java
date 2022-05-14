@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -29,6 +30,7 @@ public class ArtworkDto implements Serializable, PublicationDto {
 	private final String paymentEmail;
 	private final Integer availableCopies;
 
+	@JsonIgnore
 	@Override
 	public long getTime() {
 		return creationDateTime.getLong(ChronoField.INSTANT_SECONDS);

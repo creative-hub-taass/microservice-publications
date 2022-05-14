@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ public class PostDto implements Serializable, PublicationDto {
 	private final String title;
 	private final String body;
 
+	@JsonIgnore
 	@Override
 	public long getTime() {
 		return lastUpdate.getEpochSecond();
