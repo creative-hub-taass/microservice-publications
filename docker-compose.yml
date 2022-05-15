@@ -14,6 +14,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+      - API_GATEWAY_URL=http://localhost:8080
       - DB_HOST=db-publications
       - DB_NAME=creative-hub-publications
       - DB_USERNAME=postgres
