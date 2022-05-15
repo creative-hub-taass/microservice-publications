@@ -47,4 +47,15 @@ public class FeedController {
 		addLinkHeaderOnPagedResourceRetrieval(uriBuilder, response, resultPage);
 		return resultPage.getContent();
 	}
+
+	@GetMapping("/feed/paginated/{uid}")
+	public List<PublicationInfo> getFeedPaginated(@PathVariable UUID uid, Pageable pageable, HttpServletResponse response) {
+		Page<PublicationInfo> resultPage = feedManager.getUserFeed(uid, pageable);
+		if (pageable.getPageNumber() > resultPage.getTotalPages()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(gatewayUrl).path("/api/v1/publications/feed/paginated/" + uid);
+		addLinkHeaderOnPagedResourceRetrieval(uriBuilder, response, resultPage);
+		return resultPage.getContent();
+	}
 }

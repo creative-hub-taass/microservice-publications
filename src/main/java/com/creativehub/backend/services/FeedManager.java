@@ -15,4 +15,6 @@ public interface FeedManager {
 	List<PublicationDto> getUserFeed(UUID userId, @Nullable Integer limit);
 
 	Page<PublicationInfo> getPublicFeed(Pageable pageable);
+
+	Page<PublicationInfo> getUserFeed(UUID userId, Pageable pageable);
 }

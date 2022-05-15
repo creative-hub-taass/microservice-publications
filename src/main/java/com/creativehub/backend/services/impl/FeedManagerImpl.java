@@ -70,4 +70,23 @@ public class FeedManagerImpl implements FeedManager {
 				.collect(Collectors.toList());
 		return Utils.listToPage(pageable, publications);
 	}
+
+	@Override
+	public Page<PublicationInfo> getUserFeed(UUID userId, Pageable pageable) {
+		UserDto user = apiClient.get()
+				.uri("http://microservice-users:8080/api/v1/users/" + userId.toString())
+				.retrieve()
+				.bodyToMono(UserDto.class)
+				.onErrorResume(WebClientResponseException.NotFound.class, e -> {
+					e.printStackTrace();
+					return Mono.empty();
+				})
+				.block(REQUEST_TIMEOUT);
+		List<PublicationInfo> publications = publicationsManager.getAllPublications().stream()
+				.map(publication -> new PublicationInfo(user, publication))
+				.peek(PublicationInfo::fetchData)
+				.sorted(Comparator.reverseOrder())
+				.collect(Collectors.toList());
+		return Utils.listToPage(pageable, publications);
+	}
 }
