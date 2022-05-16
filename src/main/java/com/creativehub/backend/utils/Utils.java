@@ -1,6 +1,7 @@
 package com.creativehub.backend.utils;
 
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,5 +18,11 @@ public class Utils {
 		pagedListHolder.setPageSize(pageable.getPageSize());
 		List<T> pageList = pagedListHolder.getPageList();
 		return new PageImpl<>(pageList, pageable, totalAvailableElements);
+	}
+
+	@NonNull
+	public static <T> ParameterizedTypeReference<T> getTypeReference() {
+		return new ParameterizedTypeReference<T>() {
+		};
 	}
 }

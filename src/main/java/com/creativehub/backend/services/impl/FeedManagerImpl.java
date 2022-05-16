@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -34,7 +35,7 @@ public class FeedManagerImpl implements FeedManager {
 	public List<PublicationDto> getPublicFeed(@Nullable Integer limit) {
 		return publicationsManager.getAllPublications().stream()
 				.map(publication -> new PublicationInfo(null, publication))
-				.peek(PublicationInfo::fetchData)
+				.peek(PublicationInfo::fetchPartial)
 				.sorted(Comparator.reverseOrder())
 				.limit(limit != null ? limit : Integer.MAX_VALUE)
 				.map(PublicationInfo::getPublication)
@@ -54,7 +55,7 @@ public class FeedManagerImpl implements FeedManager {
 				.block(REQUEST_TIMEOUT);
 		return publicationsManager.getAllPublications().stream()
 				.map(publication -> new PublicationInfo(user, publication))
-				.peek(PublicationInfo::fetchData)
+				.peek(PublicationInfo::fetchPartial)
 				.sorted(Comparator.reverseOrder())
 				.limit(limit != null ? limit : Integer.MAX_VALUE)
 				.map(PublicationInfo::getPublication)
@@ -63,12 +64,7 @@ public class FeedManagerImpl implements FeedManager {
 
 	@Override
 	public Page<PublicationInfo> getPublicFeed(Pageable pageable) {
-		List<PublicationInfo> publications = publicationsManager.getAllPublications().stream()
-				.map(publication -> new PublicationInfo(null, publication))
-				.peek(PublicationInfo::fetchData)
-				.sorted(Comparator.reverseOrder())
-				.collect(Collectors.toList());
-		return Utils.listToPage(pageable, publications);
+		return getPublicationsPaged(pageable, null);
 	}
 
 	@Override
@@ -82,9 +78,14 @@ public class FeedManagerImpl implements FeedManager {
 					return Mono.empty();
 				})
 				.block(REQUEST_TIMEOUT);
+		return getPublicationsPaged(pageable, user);
+	}
+
+	@NonNull
+	private Page<PublicationInfo> getPublicationsPaged(@NonNull Pageable pageable, @Nullable UserDto user) {
 		List<PublicationInfo> publications = publicationsManager.getAllPublications().stream()
 				.map(publication -> new PublicationInfo(user, publication))
-				.peek(PublicationInfo::fetchData)
+				.peek(PublicationInfo::fetchFull)
 				.sorted(Comparator.reverseOrder())
 				.collect(Collectors.toList());
 		return Utils.listToPage(pageable, publications);

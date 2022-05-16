@@ -1,6 +1,8 @@
 package com.creativehub.backend.services.dto;
 
+import com.creativehub.backend.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -32,10 +34,48 @@ public class PublicationInfo implements Comparable<PublicationInfo> {
 	private Boolean userLiked = null;
 	@Nullable
 	private Boolean creatorsFollowedByUser = null;
+	@Nullable
+	private List<JsonNode> creators = null;
+	@Nullable
+	private List<JsonNode> comments = null;
+	@Nullable
+	private Integer commentsCount = null;
 
 	public PublicationInfo(@Nullable UserDto user, @NonNull PublicationDto publication) {
 		this.user = user;
 		this.publication = publication;
+	}
+
+	private void fetchCreators() {
+		List<String> uuids = publication.getCreations().stream()
+				.map(CreationDto::getUser)
+				.map(UUID::toString)
+				.collect(Collectors.toList());
+		this.creators = apiClient.post()
+				.uri("http://microservice-users:8080/api/v1/users/-/public")
+				.bodyValue(uuids)
+				.retrieve()
+				.bodyToMono(Utils.<List<JsonNode>>getTypeReference())
+				.block(REQUEST_TIMEOUT);
+	}
+
+	private void fetchComments() {
+		this.comments = apiClient.get()
+				.uri("http://microservice-interactions:8080/api/v1/interactions/-/comments/" + publication.getId().toString())
+				.retrieve()
+				.bodyToMono(Utils.<List<JsonNode>>getTypeReference())
+				.block(REQUEST_TIMEOUT);
+		if (this.comments != null) {
+			this.commentsCount = this.comments.size();
+		}
+	}
+
+	private void fetchCommentsCount() {
+		this.commentsCount = apiClient.get()
+				.uri("http://microservice-interactions:8080/api/v1/interactions/comments/count/" + publication.getId().toString())
+				.retrieve()
+				.bodyToMono(Integer.class)
+				.block(REQUEST_TIMEOUT);
 	}
 
 	private void fetchLikes() {
@@ -67,7 +107,8 @@ public class PublicationInfo implements Comparable<PublicationInfo> {
 		int _userLiked = userLiked != null && userLiked ? 1 : 0;
 		int _creatorsFollowedByUser = creatorsFollowedByUser != null && creatorsFollowedByUser ? 1 : 0;
 		int _likes = (likes != null ? likes : 0) + 1;
-		return _likes * (1 + _userLiked + _creatorsFollowedByUser);
+		int _comments = (commentsCount != null ? commentsCount : 0) + 1;
+		return (_likes + _comments) * (1 + _userLiked + _creatorsFollowedByUser);
 	}
 
 	@Override
@@ -82,9 +123,18 @@ public class PublicationInfo implements Comparable<PublicationInfo> {
 		} else return signum((int) time);
 	}
 
-	public void fetchData() {
+	public void fetchFull() {
+		fetchCreators();
 		fetchLikes();
 		fetchLiked();
 		fetchFollowed();
+		fetchComments();
+	}
+
+	public void fetchPartial() {
+		fetchLikes();
+		fetchLiked();
+		fetchFollowed();
+		fetchCommentsCount();
 	}
 }
