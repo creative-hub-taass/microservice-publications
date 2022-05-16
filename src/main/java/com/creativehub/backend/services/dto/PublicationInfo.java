@@ -47,48 +47,56 @@ public class PublicationInfo implements Comparable<PublicationInfo> {
 	}
 
 	private void fetchCreators() {
-		List<String> uuids = publication.getCreations().stream()
-				.map(CreationDto::getUser)
-				.map(UUID::toString)
-				.collect(Collectors.toList());
-		this.creators = apiClient.post()
-				.uri("http://microservice-users:8080/api/v1/users/-/public")
-				.bodyValue(uuids)
-				.retrieve()
-				.bodyToMono(Utils.<List<JsonNode>>getTypeReference())
-				.block(REQUEST_TIMEOUT);
+		if (creators == null) {
+			List<String> uuids = publication.getCreations().stream()
+					.map(CreationDto::getUser)
+					.map(UUID::toString)
+					.collect(Collectors.toList());
+			this.creators = apiClient.post()
+					.uri("http://microservice-users:8080/api/v1/users/-/public")
+					.bodyValue(uuids)
+					.retrieve()
+					.bodyToMono(Utils.<List<JsonNode>>getTypeReference())
+					.block(REQUEST_TIMEOUT);
+		}
 	}
 
 	private void fetchComments() {
-		this.comments = apiClient.get()
-				.uri("http://microservice-interactions:8080/api/v1/interactions/-/comments/" + publication.getId().toString())
-				.retrieve()
-				.bodyToMono(Utils.<List<JsonNode>>getTypeReference())
-				.block(REQUEST_TIMEOUT);
-		if (this.comments != null) {
-			this.commentsCount = this.comments.size();
+		if (comments == null) {
+			comments = apiClient.get()
+					.uri("http://microservice-interactions:8080/api/v1/interactions/-/comments/" + publication.getId().toString())
+					.retrieve()
+					.bodyToMono(Utils.<List<JsonNode>>getTypeReference())
+					.block(REQUEST_TIMEOUT);
+			if (comments != null) {
+				commentsCount = this.comments.size();
+			}
 		}
 	}
 
 	private void fetchCommentsCount() {
-		this.commentsCount = apiClient.get()
-				.uri("http://microservice-interactions:8080/api/v1/interactions/comments/count/" + publication.getId().toString())
-				.retrieve()
-				.bodyToMono(Integer.class)
-				.block(REQUEST_TIMEOUT);
+		if (commentsCount == null) {
+			commentsCount = apiClient.get()
+					.uri("http://microservice-interactions:8080/api/v1/interactions/comments/count/" + publication.getId().toString())
+					.retrieve()
+					.bodyToMono(Integer.class)
+					.block(REQUEST_TIMEOUT);
+		}
 	}
 
 	private void fetchLikes() {
-		this.likes = apiClient.get()
-				.uri("http://microservice-interactions:8080/api/v1/interactions/-/likes/count/" + publication.getId().toString())
-				.retrieve()
-				.bodyToMono(Integer.class)
-				.block(REQUEST_TIMEOUT);
+		if (likes == null) {
+			likes = apiClient.get()
+					.uri("http://microservice-interactions:8080/api/v1/interactions/-/likes/count/" + publication.getId().toString())
+					.retrieve()
+					.bodyToMono(Integer.class)
+					.block(REQUEST_TIMEOUT);
+		}
 	}
 
 	private void fetchLiked() {
 		if (user != null) {
-			this.userLiked = apiClient.get()
+			userLiked = apiClient.get()
 					.uri("http://microservice-interactions:8080/api/v1/interactions/userliked/" + user.getId().toString() + "/" + publication.getId().toString())
 					.retrieve()
 					.bodyToMono(Boolean.class)
@@ -124,10 +132,8 @@ public class PublicationInfo implements Comparable<PublicationInfo> {
 	}
 
 	public void fetchFull() {
+		fetchPartial();
 		fetchCreators();
-		fetchLikes();
-		fetchLiked();
-		fetchFollowed();
 		fetchComments();
 	}
 
@@ -135,6 +141,6 @@ public class PublicationInfo implements Comparable<PublicationInfo> {
 		fetchLikes();
 		fetchLiked();
 		fetchFollowed();
-		fetchCommentsCount();
+		//fetchCommentsCount();
 	}
 }

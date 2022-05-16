@@ -85,9 +85,9 @@ public class FeedManagerImpl implements FeedManager {
 	private Page<PublicationInfo> getPublicationsPaged(@NonNull Pageable pageable, @Nullable UserDto user) {
 		List<PublicationInfo> publications = publicationsManager.getAllPublications().stream()
 				.map(publication -> new PublicationInfo(user, publication))
-				.peek(PublicationInfo::fetchFull)
+				.peek(PublicationInfo::fetchPartial)
 				.sorted(Comparator.reverseOrder())
 				.collect(Collectors.toList());
-		return Utils.listToPage(pageable, publications);
+		return Utils.listToPage(pageable, publications, PublicationInfo::fetchFull);
 	}
 }
