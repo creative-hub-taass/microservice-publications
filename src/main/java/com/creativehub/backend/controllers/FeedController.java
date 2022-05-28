@@ -58,4 +58,26 @@ public class FeedController {
 		addLinkHeaderOnPagedResourceRetrieval(uriBuilder, response, resultPage);
 		return resultPage.getContent();
 	}
+
+	@GetMapping("/-/feed/events")
+	public List<PublicationInfo> getPublicEventsFeedPaginated(Pageable pageable, HttpServletResponse response) {
+		Page<PublicationInfo> resultPage = feedManager.getPublicEventsFeed(pageable);
+		if (pageable.getPageNumber() > resultPage.getTotalPages()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(gatewayUrl).path("/api/v1/publications/-/feed/events");
+		addLinkHeaderOnPagedResourceRetrieval(uriBuilder, response, resultPage);
+		return resultPage.getContent();
+	}
+
+	@GetMapping("/feed/events/{uid}")
+	public List<PublicationInfo> getEventsFeedPaginated(@PathVariable UUID uid, Pageable pageable, HttpServletResponse response) {
+		Page<PublicationInfo> resultPage = feedManager.getUserEventsFeed(uid, pageable);
+		if (pageable.getPageNumber() > resultPage.getTotalPages()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(gatewayUrl).path("/api/v1/publications/feed/events/" + uid);
+		addLinkHeaderOnPagedResourceRetrieval(uriBuilder, response, resultPage);
+		return resultPage.getContent();
+	}
 }

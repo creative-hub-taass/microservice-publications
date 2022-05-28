@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<Event, UUID> {
-	@Query("select e from Event e order by e.startDateTime DESC")
+	@Query("select e from Event e order by e.startDateTime DESC, e.endDateTime DESC")
 	List<Event> findAllOrdered();
 
 	@Query("select e from Event e where exists (select true from e.creations c where c.user = :creator) order by e.startDateTime DESC")

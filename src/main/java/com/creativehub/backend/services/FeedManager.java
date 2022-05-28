@@ -17,4 +17,8 @@ public interface FeedManager {
 	Page<PublicationInfo> getPublicFeed(Pageable pageable);
 
 	Page<PublicationInfo> getUserFeed(UUID userId, Pageable pageable);
+
+	Page<PublicationInfo> getPublicEventsFeed(Pageable pageable);
+
+	Page<PublicationInfo> getUserEventsFeed(UUID userId, Pageable pageable);
 }

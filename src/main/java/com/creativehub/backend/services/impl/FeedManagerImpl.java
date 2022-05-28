@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.impl;
 
+import com.creativehub.backend.services.EventsManager;
 import com.creativehub.backend.services.FeedManager;
 import com.creativehub.backend.services.PublicationsManager;
 import com.creativehub.backend.services.dto.PublicationDto;
@@ -30,6 +31,7 @@ public class FeedManagerImpl implements FeedManager {
 	private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(30);
 	private static final WebClient apiClient = WebClient.create();
 	private final PublicationsManager publicationsManager;
+	private final EventsManager eventsManager;
 
 	@Override
 	public List<PublicationDto> getPublicFeed(@Nullable Integer limit) {
@@ -44,15 +46,7 @@ public class FeedManagerImpl implements FeedManager {
 
 	@Override
 	public List<PublicationDto> getUserFeed(UUID userId, @Nullable Integer limit) {
-		UserDto user = apiClient.get()
-				.uri("http://microservice-users:8080/api/v1/users/" + userId.toString())
-				.retrieve()
-				.bodyToMono(UserDto.class)
-				.onErrorResume(WebClientResponseException.NotFound.class, e -> {
-					e.printStackTrace();
-					return Mono.empty();
-				})
-				.block(REQUEST_TIMEOUT);
+		UserDto user = getUser(userId);
 		return publicationsManager.getAllPublications().stream()
 				.map(publication -> new PublicationInfo(user, publication))
 				.peek(PublicationInfo::fetchPartial)
@@ -69,16 +63,19 @@ public class FeedManagerImpl implements FeedManager {
 
 	@Override
 	public Page<PublicationInfo> getUserFeed(UUID userId, Pageable pageable) {
-		UserDto user = apiClient.get()
-				.uri("http://microservice-users:8080/api/v1/users/" + userId.toString())
-				.retrieve()
-				.bodyToMono(UserDto.class)
-				.onErrorResume(WebClientResponseException.NotFound.class, e -> {
-					e.printStackTrace();
-					return Mono.empty();
-				})
-				.block(REQUEST_TIMEOUT);
+		UserDto user = getUser(userId);
 		return getPublicationsPaged(pageable, user);
+	}
+
+	@Override
+	public Page<PublicationInfo> getPublicEventsFeed(Pageable pageable) {
+		return getEventsPaged(pageable, null);
+	}
+
+	@Override
+	public Page<PublicationInfo> getUserEventsFeed(UUID userId, Pageable pageable) {
+		UserDto user = getUser(userId);
+		return getEventsPaged(pageable, user);
 	}
 
 	@NonNull
@@ -89,5 +86,27 @@ public class FeedManagerImpl implements FeedManager {
 				.sorted(Comparator.reverseOrder())
 				.collect(Collectors.toList());
 		return Utils.listToPage(pageable, publications, PublicationInfo::fetchFull);
+	}
+
+	@NonNull
+	private Page<PublicationInfo> getEventsPaged(@NonNull Pageable pageable, @Nullable UserDto user) {
+		List<PublicationInfo> publications = eventsManager.getAllEvents().stream()
+				.map(publication -> new PublicationInfo(user, publication))
+				.peek(PublicationInfo::fetchPartial)
+				.collect(Collectors.toList());
+		return Utils.listToPage(pageable, publications, PublicationInfo::fetchFull);
+	}
+
+	@Nullable
+	private UserDto getUser(UUID userId) {
+		return apiClient.get()
+				.uri("http://microservice-users:8080/api/v1/users/" + userId.toString())
+				.retrieve()
+				.bodyToMono(UserDto.class)
+				.onErrorResume(WebClientResponseException.NotFound.class, e -> {
+					e.printStackTrace();
+					return Mono.empty();
+				})
+				.block(REQUEST_TIMEOUT);
 	}
 }
