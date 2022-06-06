@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.impl;
 
+import com.creativehub.backend.models.EventCreation;
 import com.creativehub.backend.repositories.EventCreationRepository;
 import com.creativehub.backend.repositories.EventRepository;
 import com.creativehub.backend.services.EventsManager;
@@ -69,6 +70,16 @@ public class EventsManagerImpl implements EventsManager {
 
 	@Override
 	public void deleteAllEventsByCreator(UUID id) {
-		eventRepository.deleteAllByCreator(id);
+		eventRepository.findAllByCreator(id).forEach(event -> {
+			List<EventCreation> creations = event.getCreations();
+			if (creations.size() > 1) {
+				creations.stream()
+						.filter(creation -> creation.getUser() == id)
+						.forEach(eventCreationRepository::delete);
+			} else {
+				eventCreationRepository.deleteAll(creations);
+				eventRepository.delete(event);
+			}
+		});
 	}
 }

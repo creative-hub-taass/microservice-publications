@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.impl;
 
+import com.creativehub.backend.models.ArtworkCreation;
 import com.creativehub.backend.repositories.ArtworkCreationRepository;
 import com.creativehub.backend.repositories.ArtworkRepository;
 import com.creativehub.backend.services.ArtworksManager;
@@ -69,6 +70,16 @@ public class ArtworksManagerImpl implements ArtworksManager {
 
 	@Override
 	public void deleteAllArtworksByCreator(UUID id) {
-		artworkRepository.deleteAllByCreator(id);
+		artworkRepository.findAllByCreator(id).forEach(artwork -> {
+			List<ArtworkCreation> creations = artwork.getCreations();
+			if (creations.size() > 1) {
+				creations.stream()
+						.filter(creation -> creation.getUser() == id)
+						.forEach(artworkCreationRepository::delete);
+			} else {
+				artworkCreationRepository.deleteAll(creations);
+				artworkRepository.delete(artwork);
+			}
+		});
 	}
 }

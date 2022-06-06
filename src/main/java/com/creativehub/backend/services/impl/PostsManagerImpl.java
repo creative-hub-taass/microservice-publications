@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.impl;
 
+import com.creativehub.backend.models.PostCreation;
 import com.creativehub.backend.repositories.PostCreationRepository;
 import com.creativehub.backend.repositories.PostRepository;
 import com.creativehub.backend.services.PostsManager;
@@ -69,6 +70,16 @@ public class PostsManagerImpl implements PostsManager {
 
 	@Override
 	public void deleteAllPostsByCreator(UUID id) {
-		postRepository.deleteAllByCreator(id);
+		postRepository.findAllByCreator(id).forEach(post -> {
+			List<PostCreation> creations = post.getCreations();
+			if (creations.size() > 1) {
+				creations.stream()
+						.filter(creation -> creation.getUser() == id)
+						.forEach(postCreationRepository::delete);
+			} else {
+				postCreationRepository.deleteAll(creations);
+				postRepository.delete(post);
+			}
+		});
 	}
 }
