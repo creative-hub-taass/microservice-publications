@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.impl;
 
+import com.creativehub.backend.models.Artwork;
 import com.creativehub.backend.models.ArtworkCreation;
 import com.creativehub.backend.repositories.ArtworkCreationRepository;
 import com.creativehub.backend.repositories.ArtworkRepository;
@@ -9,6 +10,7 @@ import com.creativehub.backend.services.dto.ArtworkDto;
 import com.creativehub.backend.services.mapper.ArtworkCreationMapper;
 import com.creativehub.backend.services.mapper.ArtworkMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArtworksManagerImpl implements ArtworksManager {
@@ -70,13 +73,19 @@ public class ArtworksManagerImpl implements ArtworksManager {
 
 	@Override
 	public void deleteAllArtworksByCreator(UUID id) {
-		artworkRepository.findAllByCreator(id).forEach(artwork -> {
+		log.debug(id.toString());
+		List<Artwork> allByCreator = artworkRepository.findAllByCreator(id);
+		log.debug(allByCreator.stream().map(Artwork::toString).collect(Collectors.joining()));
+		allByCreator.forEach(artwork -> {
+			log.debug(artwork.toString());
 			List<ArtworkCreation> creations = artwork.getCreations();
+			log.debug(creations.stream().map(ArtworkCreation::toString).collect(Collectors.joining()));
 			if (creations.size() > 1) {
 				creations.stream()
 						.filter(creation -> creation.getUser() == id)
 						.forEach(artworkCreationRepository::delete);
 			} else {
+				log.debug("DELETE " + artwork.getId().toString());
 				artworkRepository.delete(artwork);
 			}
 		});
