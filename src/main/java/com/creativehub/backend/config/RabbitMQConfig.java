@@ -29,7 +29,7 @@ public class RabbitMQConfig {
 	}
 
 	@Bean
-	Exchange myExchange() {
+	FanoutExchange myExchange() {
 		return ExchangeBuilder.directExchange(exchange).durable(true).build();
 	}
 
@@ -37,9 +37,7 @@ public class RabbitMQConfig {
 	Binding binding() {
 		return BindingBuilder
 				.bind(queue())
-				.to(myExchange())
-				.with("")
-				.noargs();
+				.to(myExchange());
 	}
 
 	@Bean
