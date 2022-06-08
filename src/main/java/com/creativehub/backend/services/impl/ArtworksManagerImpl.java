@@ -77,7 +77,6 @@ public class ArtworksManagerImpl implements ArtworksManager {
 						.filter(creation -> creation.getUser() == id)
 						.forEach(artworkCreationRepository::delete);
 			} else {
-				artworkCreationRepository.deleteAll(creations);
 				artworkRepository.delete(artwork);
 			}
 		});

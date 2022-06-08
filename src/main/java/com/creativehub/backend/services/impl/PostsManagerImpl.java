@@ -77,7 +77,6 @@ public class PostsManagerImpl implements PostsManager {
 						.filter(creation -> creation.getUser() == id)
 						.forEach(postCreationRepository::delete);
 			} else {
-				postCreationRepository.deleteAll(creations);
 				postRepository.delete(post);
 			}
 		});

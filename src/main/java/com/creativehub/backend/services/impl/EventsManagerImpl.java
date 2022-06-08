@@ -77,7 +77,6 @@ public class EventsManagerImpl implements EventsManager {
 						.filter(creation -> creation.getUser() == id)
 						.forEach(eventCreationRepository::delete);
 			} else {
-				eventCreationRepository.deleteAll(creations);
 				eventRepository.delete(event);
 			}
 		});
