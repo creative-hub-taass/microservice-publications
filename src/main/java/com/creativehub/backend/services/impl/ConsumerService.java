@@ -23,7 +23,7 @@ public class ConsumerService {
 	 */
 	@RabbitListener(queues = "${spring.rabbitmq.queue}")
 	public void receivedMessage(UUID id) {
-		log.debug("DELETE ALL BY: " + id.toString());
+		System.out.println("E' arrivato il messaggio "+ id);
 		try {
 			artworksManager.deleteAllArtworksByCreator(id);
 			eventsManager.deleteAllEventsByCreator(id);
