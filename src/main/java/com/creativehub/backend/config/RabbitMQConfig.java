@@ -16,8 +16,6 @@ public class RabbitMQConfig {
 	private String queue;
 	@Value("${fanout.name}")
 	private String exchange;
-	@Value("${spring.rabbitmq.routingkey}")
-	private String routingKey;
 	@Value("${spring.rabbitmq.username}")
 	private String username;
 	@Value("${spring.rabbitmq.password}")
