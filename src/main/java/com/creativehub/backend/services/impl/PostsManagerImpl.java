@@ -73,17 +73,13 @@ public class PostsManagerImpl implements PostsManager {
 
 	@Override
 	public void deleteAllPostsByCreator(UUID id) {
-		log.debug("DELETE POSTS: " + id.toString());
 		List<Post> allByCreator = postRepository.findAllByCreator(id);
 		allByCreator.forEach(post -> {
 			List<PostCreation> creations = post.getCreations();
-			if (creations.size() > 1) {
-				creations.stream()
-						.filter(creation -> creation.getUser() == id)
-						.forEach(postCreationRepository::delete);
-			} else {
+			if (creations.size() <= 1) {
 				postRepository.delete(post);
 			}
 		});
+		postCreationRepository.deleteAllByUser(id);
 	}
 }

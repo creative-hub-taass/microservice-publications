@@ -24,4 +24,9 @@ public class PublicationsController {
 	public List<PublicationDto> getAllPublicationsByCreator(@PathVariable UUID uid) {
 		return publicationsManager.getAllPublicationsByCreator(uid);
 	}
+
+	@DeleteMapping("/creator/{uid}")
+	public void deleteAllPublicationsByCreator(@PathVariable UUID uid) {
+		publicationsManager.deleteAllPublicationsByCreator(uid);
+	}
 }

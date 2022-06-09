@@ -73,17 +73,13 @@ public class EventsManagerImpl implements EventsManager {
 
 	@Override
 	public void deleteAllEventsByCreator(UUID id) {
-		log.debug("DELETE EVENTS: " + id.toString());
 		List<Event> allByCreator = eventRepository.findAllByCreator(id);
 		allByCreator.forEach(event -> {
 			List<EventCreation> creations = event.getCreations();
-			if (creations.size() > 1) {
-				creations.stream()
-						.filter(creation -> creation.getUser() == id)
-						.forEach(eventCreationRepository::delete);
-			} else {
+			if (creations.size() <= 1) {
 				eventRepository.delete(event);
 			}
 		});
+		eventCreationRepository.deleteAllByUser(id);
 	}
 }

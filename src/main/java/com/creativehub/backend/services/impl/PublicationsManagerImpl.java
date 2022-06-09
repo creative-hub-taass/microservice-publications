@@ -6,6 +6,7 @@ import com.creativehub.backend.services.PostsManager;
 import com.creativehub.backend.services.PublicationsManager;
 import com.creativehub.backend.services.dto.PublicationDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PublicationsManagerImpl implements PublicationsManager {
@@ -34,5 +36,16 @@ public class PublicationsManagerImpl implements PublicationsManager {
 				.flatMap(Collection::stream)
 				.sorted()
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public void deleteAllPublicationsByCreator(UUID id) {
+		try {
+			artworksManager.deleteAllArtworksByCreator(id);
+			eventsManager.deleteAllEventsByCreator(id);
+			postsManager.deleteAllPostsByCreator(id);
+		} catch (Exception e) {
+			log.error("ERROR", e);
+		}
 	}
 }
