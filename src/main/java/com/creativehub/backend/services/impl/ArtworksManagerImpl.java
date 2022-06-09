@@ -73,7 +73,7 @@ public class ArtworksManagerImpl implements ArtworksManager {
 
 	@Override
 	public void deleteAllArtworksByCreator(UUID id) {
-		log.debug(id.toString());
+		log.debug("DELETE ARTWORKS: " + id.toString());
 		List<Artwork> allByCreator = artworkRepository.findAllByCreator(id);
 		log.debug(allByCreator.stream().map(Artwork::toString).collect(Collectors.joining()));
 		allByCreator.forEach(artwork -> {

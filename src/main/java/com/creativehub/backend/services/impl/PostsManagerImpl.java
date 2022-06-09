@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.impl;
 
+import com.creativehub.backend.models.Post;
 import com.creativehub.backend.models.PostCreation;
 import com.creativehub.backend.repositories.PostCreationRepository;
 import com.creativehub.backend.repositories.PostRepository;
@@ -9,6 +10,7 @@ import com.creativehub.backend.services.dto.PostDto;
 import com.creativehub.backend.services.mapper.PostCreationMapper;
 import com.creativehub.backend.services.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostsManagerImpl implements PostsManager {
@@ -70,7 +73,9 @@ public class PostsManagerImpl implements PostsManager {
 
 	@Override
 	public void deleteAllPostsByCreator(UUID id) {
-		postRepository.findAllByCreator(id).forEach(post -> {
+		log.debug("DELETE POSTS: " + id.toString());
+		List<Post> allByCreator = postRepository.findAllByCreator(id);
+		allByCreator.forEach(post -> {
 			List<PostCreation> creations = post.getCreations();
 			if (creations.size() > 1) {
 				creations.stream()

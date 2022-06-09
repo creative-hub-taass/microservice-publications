@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.impl;
 
+import com.creativehub.backend.models.Event;
 import com.creativehub.backend.models.EventCreation;
 import com.creativehub.backend.repositories.EventCreationRepository;
 import com.creativehub.backend.repositories.EventRepository;
@@ -9,6 +10,7 @@ import com.creativehub.backend.services.dto.EventDto;
 import com.creativehub.backend.services.mapper.EventCreationMapper;
 import com.creativehub.backend.services.mapper.EventMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventsManagerImpl implements EventsManager {
@@ -70,7 +73,9 @@ public class EventsManagerImpl implements EventsManager {
 
 	@Override
 	public void deleteAllEventsByCreator(UUID id) {
-		eventRepository.findAllByCreator(id).forEach(event -> {
+		log.debug("DELETE EVENTS: " + id.toString());
+		List<Event> allByCreator = eventRepository.findAllByCreator(id);
+		allByCreator.forEach(event -> {
 			List<EventCreation> creations = event.getCreations();
 			if (creations.size() > 1) {
 				creations.stream()
