@@ -27,5 +27,7 @@ public interface ArtworksManager {
 
 	void deleteAllArtworksByCreator(UUID id);
 
-  public void decrementArtworkAvailability(UUID id);
+	void decrementArtworkAvailability(UUID id);
+
+	Optional<ArtworkCreationDto> getArtworkCreation(UUID id);
 }

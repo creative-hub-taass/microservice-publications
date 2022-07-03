@@ -92,4 +92,9 @@ public class ArtworksManagerImpl implements ArtworksManager {
 			}
 		});
 	}
+
+	@Override
+	public Optional<ArtworkCreationDto> getArtworkCreation(UUID id) {
+		return artworkCreationRepository.findById(id).map(artworkCreationMapper::artworkCreationToArtworkCreationDto);
+	}
 }

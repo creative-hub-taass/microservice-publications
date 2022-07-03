@@ -47,6 +47,11 @@ public class ArtworksController {
 		artworksManager.deleteArtworkById(id);
 	}
 
+	@GetMapping("/artworks/creations/{id}")
+	public ResponseEntity<ArtworkCreationDto> getArtworkCreation(@PathVariable UUID id) {
+		return ResponseEntity.of(artworksManager.getArtworkCreation(id));
+	}
+
 	@PostMapping("/artworks/creations/")
 	public ResponseEntity<ArtworkCreationDto> saveArtworkCreation(@RequestBody ArtworkCreationDto artworkCreationDto) {
 		return ResponseEntity.ok(artworksManager.saveArtworkCreation(artworkCreationDto));
