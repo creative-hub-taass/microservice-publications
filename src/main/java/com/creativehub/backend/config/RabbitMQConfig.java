@@ -57,6 +57,7 @@ public class RabbitMQConfig {
     return new DirectExchange(directName);
   }
 
+  @Bean
   Binding bindingDirect() {
     return BindingBuilder
       .bind(queueDirect())
