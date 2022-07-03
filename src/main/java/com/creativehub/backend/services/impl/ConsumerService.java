@@ -26,7 +26,7 @@ public class ConsumerService {
 	}
 
   /**
-   * Arriva l'ID dell'utente di cui devono essere eliminate le pubblicazioni
+   * Arriva l'ID dell'utente di cui deve essere decrementato il numero di copie disponibili
    */
   @RabbitListener(queues = "${spring.rabbitmq.queueDirect}")
   public void receivedMessagePayments(UUID id) {
