@@ -20,4 +20,5 @@ public interface ArtworkRepository extends JpaRepository<Artwork, UUID> {
 	@Modifying
 	@Query("delete from Artwork a where exists (select true from a.creations c where c.user = :creator)")
 	void deleteAllByCreator(UUID creator);
+
 }

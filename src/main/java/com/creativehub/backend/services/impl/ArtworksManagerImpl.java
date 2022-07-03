@@ -82,4 +82,14 @@ public class ArtworksManagerImpl implements ArtworksManager {
 		});
 		artworkCreationRepository.deleteAllByUser(id);
 	}
+
+  public void decrementArtworkAvailability(UUID id) {
+    Artwork artwork = artworkRepository.getById(id);
+    Integer available = artwork.getAvailableCopies();
+    if(available > 0) {
+      available--;
+      artwork.setAvailableCopies(available);
+      artworkRepository.save(artwork);
+    }
+  }
 }

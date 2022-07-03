@@ -1,5 +1,6 @@
 package com.creativehub.backend.services.impl;
 
+import com.creativehub.backend.services.ArtworksManager;
 import com.creativehub.backend.services.PublicationsManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ConsumerService {
 	private final PublicationsManager publicationsManager;
+  private final ArtworksManager artworksManager;
 
 	/**
 	 * Arriva l'ID dell'utente di cui devono essere eliminate le pubblicazioni
@@ -22,4 +24,13 @@ public class ConsumerService {
 		System.out.println("E' arrivato il messaggio " + id);
 		publicationsManager.deleteAllPublicationsByCreator(id);
 	}
+
+  /**
+   * Arriva l'ID dell'utente di cui devono essere eliminate le pubblicazioni
+   */
+  @RabbitListener(queues = "${spring.rabbitmq.queueDirect}")
+  public void receivedMessagePayments(UUID id) {
+    System.out.println("E' arrivato il messaggio da payments " + id);
+    artworksManager.decrementArtworkAvailability(id);
+  }
 }

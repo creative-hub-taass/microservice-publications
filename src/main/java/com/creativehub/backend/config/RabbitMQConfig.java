@@ -16,6 +16,16 @@ public class RabbitMQConfig {
 	private String queue;
 	@Value("${fanout.name}")
 	private String fanoutName;
+
+  @Value("${exchange.name}")
+  private String directName;
+
+  @Value("${spring.rabbitmq.queueDirect}")
+  private String queueDirect;
+
+  @Value("${routing.key}")
+  private String routingKey;
+
 	@Value("${spring.rabbitmq.username}")
 	private String username;
 	@Value("${spring.rabbitmq.password}")
@@ -28,15 +38,31 @@ public class RabbitMQConfig {
 		return new Queue(queue, true);
 	}
 
-	@Bean
+  @Bean
+  Queue queueDirect() {return new Queue(queueDirect, true);}
+
+  @Bean
 	FanoutExchange myExchange() {
 	return new FanoutExchange(fanoutName);}
+
 	@Bean
 	Binding binding() {
 		return BindingBuilder
 				.bind(queue())
 				.to(myExchange());
 	}
+
+  @Bean
+  DirectExchange myExchangeDirect() {
+    return new DirectExchange(directName);
+  }
+
+  Binding bindingDirect() {
+    return BindingBuilder
+      .bind(queueDirect())
+      .to(myExchangeDirect())
+      .with(routingKey);
+  }
 
 	@Bean
 	public ConnectionFactory connectionFactory() {
