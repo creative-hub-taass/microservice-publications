@@ -83,13 +83,13 @@ public class ArtworksManagerImpl implements ArtworksManager {
 		artworkCreationRepository.deleteAllByUser(id);
 	}
 
-  public void decrementArtworkAvailability(UUID id) {
-    Artwork artwork = artworkRepository.getById(id);
-    Integer available = artwork.getAvailableCopies();
-    if(available > 0) {
-      available--;
-      artwork.setAvailableCopies(available);
-      artworkRepository.save(artwork);
-    }
-  }
+	public void decrementArtworkAvailability(UUID id) {
+		artworkRepository.findById(id).ifPresent(artwork -> {
+			int available = artwork.getAvailableCopies();
+			if (available > 0) {
+				artwork.setAvailableCopies(available - 1);
+				artworkRepository.save(artwork);
+			}
+		});
+	}
 }

@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ConsumerService {
 	private final PublicationsManager publicationsManager;
-  private final ArtworksManager artworksManager;
+	private final ArtworksManager artworksManager;
 
 	/**
 	 * Arriva l'ID dell'utente di cui devono essere eliminate le pubblicazioni
@@ -25,12 +25,16 @@ public class ConsumerService {
 		publicationsManager.deleteAllPublicationsByCreator(id);
 	}
 
-  /**
-   * Arriva l'ID dell'utente di cui deve essere decrementato il numero di copie disponibili
-   */
-  @RabbitListener(queues = "${spring.rabbitmq.queueDirect}")
-  public void receivedMessagePayments(UUID id) {
-    System.out.println("E' arrivato il messaggio da payments " + id);
-    artworksManager.decrementArtworkAvailability(id);
-  }
+	/**
+	 * Arriva l'ID dell'artwork di cui deve essere decrementato il numero di copie disponibili
+	 */
+	@RabbitListener(queues = "${spring.rabbitmq.queueDirect}")
+	public void receivedMessagePayments(UUID id) {
+		try {
+			System.out.println("E' arrivato il messaggio da payments " + id);
+			artworksManager.decrementArtworkAvailability(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
